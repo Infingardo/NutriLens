@@ -7,6 +7,7 @@
 //   node tests/harness.mjs run  <index.html>     # output JSON di tutti i casi
 //   node tests/harness.mjs diff <a.html> <b.html> # casi in cui due versioni danno risultati diversi
 //
+// Casi con "incolla": testo nell'area paste, clic su parse, poi controllo dei campi (SPEC-incolla.md).
 // Limiti: il DOM e' simulato. validity.badInput viene impostato dal test, non
 // prodotto digitando: quel comportamento si verifica nel browser (tests/PROTOCOLLO-BROWSER.md).
 import fs from 'node:fs';
@@ -85,8 +86,20 @@ function esegui(file) {
     let e = env(html, store);
     if (c.prima) { applica(e, CASI.casi.find((x) => x.id === c.prima)); e.els.get('run').onclick(); e.alerts.length = 0; }
     applica(e, c);
-    e.els.get('run').onclick();
-    const r = leggi(e);
+    let r;
+    if (c.incolla !== undefined) {
+      // SPEC-incolla: compila dai dati incollati, poi (se richiesto) valuta
+      e.els.get('paste').value = c.incolla;
+      e.els.get('parse').onclick();
+      const campi = { basis: e.els.get('basis').value };
+      for (const id of ['kcal', 'carb', 'sugar', 'poly', 'fiber', 'protein', 'sat', 'salt', 'pot', 'phos']) campi[id] = e.els.get(id).value;
+      const dopo = leggi(e);
+      if (c.valuta_dopo) e.els.get('run').onclick();
+      r = { ...leggi(e), campi, info: e.els.get('parseinfo').innerHTML, output_visibile_dopo_incolla: dopo.output_visibile };
+    } else {
+      e.els.get('run').onclick();
+      r = leggi(e);
+    }
     if (c.storico) {
       e.els.get('save').onclick();
       const salvati = JSON.parse(store.get('nutrilens') || '[]');
@@ -120,6 +133,10 @@ function verifica(c, r) {
       if (!x?.testo.includes(s)) err.push(`${p}: il testo non contiene «${s}»`);
     }
   }
+  for (const [k, v] of Object.entries(a.campi ?? {})) if (r.campi?.[k] !== v) err.push(`campo ${k}: atteso ${JSON.stringify(v)}, ottenuto ${JSON.stringify(r.campi?.[k])}`);
+  for (const s of a.info_contiene ?? []) if (!r.info?.includes(s)) err.push(`il riepilogo non contiene «${s}»`);
+  for (const s of a.info_non_contiene ?? []) if (r.info?.includes(s)) err.push(`il riepilogo contiene «${s}»`);
+  if (a.output_nascosto && r.output_visibile_dopo_incolla) err.push('risultato precedente ancora visibile dopo la compilazione');
   if (a.storico) for (const [k, v] of Object.entries(a.storico)) if (r.storico?.[k] !== v) err.push(`storico.${k}: atteso ${JSON.stringify(v)}, ottenuto ${JSON.stringify(r.storico?.[k])}`);
   return err;
 }

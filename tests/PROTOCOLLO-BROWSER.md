@@ -83,3 +83,18 @@ Osservazioni, non corrette:
   con la v0.1.1 resta "Da contestualizzare";
 - C21 mostra "0.3 g" accanto a "Da contestualizzare": il testo arrotonda a
   0,1 g (0,312 → 0,3) mentre la classe usa il valore esatto.
+
+## v0.1.3 — 24 novembre 2026: testo incollato
+
+Stesso ambiente, server sulla cartella del repository.
+
+| Passo | Esito |
+|---|---|
+| Digita nell'area "Tabella nutrizionale" una tabella sintetica a due colonne (100 g, porzione 40 g) con la frase sul sodio in fondo, poi "Compila i campi dal testo" | Energia 395, Saturi 5, Carboidrati 50, Polioli 10, Sale 0.75, Per 100 g; riepilogo con la riga di origine di ogni valore |
+| Profili Ipertensione e Dislipidemia → Valuta | entrambi "Tendenzialmente favorevole" (0,3 g di sale, 2 g di saturi per 40 g) |
+| Incolla un altro testo ("Proteine 10 g") → Compila | il risultato precedente si nasconde, Sale torna vuoto, Proteine 10 |
+| Cache | solo `nutrilens-v013` |
+| Ripetuto con il parser finale (dopo la review), aggiungendo `di cui zuccheri >1 g >0,4 g` | stessi campi; Zuccheri vuoto con "valore non esatto in etichetta"; Ipertensione e Dislipidemia favorevoli |
+
+Non provato: il testo copiato davvero da una foto con Testo live o Google Lens.
+L'impaginazione di quel testo è l'incognita principale della strada A.

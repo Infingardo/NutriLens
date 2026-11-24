@@ -1,5 +1,43 @@
 # Changelog
 
+## v0.1.3 — 2026-11-24
+
+### Aggiunto
+- **Compilare i campi da un testo incollato** (`SPEC-incolla.md`, decisioni di
+  Filippo del 24/11/2026). Si copia il testo della tabella dalla foto con le
+  funzioni del sistema (Testo live su iPhone e Mac, Google Lens su Android), lo
+  si incolla e "Compila i campi dal testo" propone i valori. Non c'è OCR
+  nell'app e nessuna nuova dipendenza.
+  - **Propone, non valuta:** svuota i 10 campi nutrizionali e compila quelli
+    riconosciuti, mostrando per ciascuno la riga di origine. Nasconde il
+    risultato precedente. La valutazione resta un passo esplicito.
+  - **Nel dubbio, vuoto:** restano vuoti, con un avviso:
+    - i valori non esatti (`<`, `>`, `≤`, `≥`, `~`, "tracce") e gli intervalli;
+    - l'energia solo in kJ e le unità non previste (`cal`, `µg`, `ml`…);
+    - i numeri come `1.650`;
+    - le righe con più nutrienti o con altri valori dopo il nutriente;
+    - i nutrienti ripetuti con numeri;
+    - più di due colonne, o due colonne senza un'intestazione che dica quale è
+      per 100 g.
+  - **Sodio:** sale = sodio × 2,5 (Reg. UE 1169/2011), solo se il sale non c'è.
+  - **Colonne:** con due colonne si usa quella per 100 g.
+
+### Invariato
+- Regole di valutazione, soglie e controlli di validità: i casi C01–C27
+  passano invariati.
+
+### Test
+- Casi P01–P21 con attesi ricavati a mano da `SPEC-incolla.md`; l'harness
+  simula incolla → compila → (valuta). `node tests/harness.mjs check`: 48/48.
+- Review cross-model (Claude → Codex, `verify-agent`, 4 round): convergente.
+  Corretti 4 difetti che compilavano un valore sbagliato (unità non previste,
+  righe con più nutrienti, `saturi … monoinsaturi …`, `>`/`≥`/`~`) e il sale
+  non calcolato dal sodio in presenza della frase sul sodio.
+
+### Non verificato
+- Testo copiato davvero da una foto con Testo live o Google Lens: la sua
+  impaginazione è l'incognita principale.
+
 ## v0.1.2 — 2026-11-24
 
 ### Corretto
