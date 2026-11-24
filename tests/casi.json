@@ -28,7 +28,7 @@
     {"id": "C07", "descrizione": "Controllo peso fuori dallo spuntino: non valutato",
      "base": "portion", "valori": {"kcal": 100}, "contesto": "Pasto", "profili": ["weight"],
      "atteso": {"classi": {"weight": "unknown"}, "testo_contiene": {"weight": "100 kcal per pasto"}}},
-    {"id": "C08", "descrizione": "Celiachia con 'senza glutine' dichiarato (regola pubblicata: sempre unknown; nello ZIP era good)",
+    {"id": "C08", "descrizione": "Celiachia con 'senza glutine' dichiarato (regola pubblicata, confermata da Filippo il 24/11/2026: sempre unknown; nello ZIP era good)",
      "base": "portion", "valori": {"carb": 5, "poly": 0}, "ingredienti": "Prodotto senza glutine", "profili": ["cel"],
      "atteso": {"classi": {"cel": "unknown"}}},
     {"id": "C09", "descrizione": "Malattia renale: sempre da profilo clinico, riporta potassio e fosforo",

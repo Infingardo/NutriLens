@@ -23,6 +23,13 @@
   pubblicata e la v0.1.1 differiscono solo nei 4 casi di input non
   interpretabile.
 
+### Decisioni
+- **Celiachia: resta la regola pubblicata** (decisione di Filippo, 24 novembre
+  2026). Il risultato e' sempre "Dati insufficienti", con l'invito a verificare
+  la dichiarazione originale e le contaminazioni. Lo ZIP `NutriLens-v0.1.zip`
+  dava invece "Tendenzialmente favorevole" quando gli ingredienti dichiaravano
+  "senza glutine"; quella variante non viene ripresa. Caso C08.
+
 ### Test aggiunti
 - `tests/harness.mjs` + `tests/casi.json`: 20 casi che eseguono lo script reale
   della pagina in un DOM simulato. Le classi attese sono scritte a mano dalle
@@ -36,11 +43,6 @@
   calcolo produce `0.30000000000000004`, che supera `<= 0.3`: risultato "Da
   contestualizzare" invece di "Tendenzialmente favorevole" (caso C20). Lo stesso
   vale potenzialmente per ogni soglia applicata dopo la scala per 100 g.
-- **Celiachia: divergenza tra lo ZIP originale e la versione pubblicata.**
-  Nello ZIP `NutriLens-v0.1.zip`, se gli ingredienti dichiarano "senza glutine"
-  (senza negazione) il risultato e' "Tendenzialmente favorevole". Nella versione
-  pubblicata su GitHub e' sempre "Dati insufficienti". La v0.1.1 mantiene la
-  regola pubblicata. Quale sia quella voluta e' da decidere.
 - **Aggiornamento solo alla chiusura.** Senza `skipWaiting`/`clients.claim`, la
   nuova versione si attiva solo dopo che tutte le schede della vecchia sono state
   chiuse; un semplice ricaricamento mostra ancora la v0.1. Confermato in browser.
