@@ -1,5 +1,49 @@
 # Changelog
 
+## v0.1.2 — 2026-11-24
+
+### Corretto
+- **Soglie e virgola mobile** (`SPEC-soglie.md`, decisione di Filippo del
+  24/11/2026). Le soglie si confrontano con il valore decimale esatto: i valori
+  riferiti alla porzione e i carboidrati netti vengono arrotondati a 9 decimali
+  prima dei confronti. Prima, per esempio, 0,75 g/100 g × 40 g dava
+  `0.30000000000000004` e il sale risultava "Da contestualizzare" invece di
+  "Tendenzialmente favorevole".
+  - Output che cambiano: solo i valori che cadono esattamente su una soglia.
+    Su combinazioni sintetiche il difetto riguardava il sale e i carboidrati
+    netti; nessun caso per saturi, energia e polioli.
+  - Il testo di Malattia renale mostra potassio e fosforo senza residui (133.2
+    invece di 133.20000000000002).
+- **Pulizia delle cache.** All'attivazione il service worker elimina tutte le
+  cache `nutrilens-*` diverse da quella corrente, invece di un nome scritto a
+  mano.
+
+### Invariato
+- Soglie, classi, testi, profili, regola della celiachia e controlli di
+  validità. `node tests/harness.mjs diff` contro la v0.1.1: cambiano solo
+  C20, C22, C23, C25 (classe) e C26 (testo).
+- Review cross-model (Claude → Codex, `verify-agent`, 2 round): convergente.
+  R1-1 (overflow di `q()` con valori enormi) corretto, caso C27.
+
+### Test
+- Casi C20–C27 con attesi ricavati a mano da `SPEC-soglie.md`: valori
+  esattamente sulla soglia e appena sopra, per sale e carboidrati netti, per
+  100 g e per porzione. C20 non è più un difetto noto.
+
+### Ancora noti
+- **Aggiornamento solo alla chiusura** di tutte le schede (nessun
+  `skipWaiting`).
+- **Virgola decimale:** provata solo in Chromium con lingua `it`.
+- **Valori non finiti dopo il calcolo** (review Codex, R2-1; presente anche
+  nella v0.1.1). La porzione non viene controllata con `Number.isFinite`, e un
+  prodotto di due valori enormi ma finiti puo' dare `Infinity`. Lo SPEC lascia
+  invariati i controlli di validita': va deciso a parte.
+- **Testo e classe vicino alla soglia.** 0,312 g di sale appare come "0.3 g"
+  accanto a "Da contestualizzare": il testo arrotonda a 0,1, la classe usa il
+  valore esatto.
+- **Storico non ricalcolato:** le voci salvate con una versione precedente
+  conservano la classe di allora.
+
 ## v0.1.1 — 2026-11-24
 
 ### Corretto

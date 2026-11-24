@@ -1,5 +1,5 @@
 {
-  "_nota": "Classi attese ricavate a mano dalle regole pubblicate (v0.1, commit b914ce8), senza eseguire il codice. good=Tendenzialmente favorevole, warn=Da contestualizzare, unknown=Dati insufficienti. 'noto': difetto osservato e documentato, non corretto (richiede uno SPEC dedicato).",
+  "_nota": "Classi attese ricavate a mano dalle regole pubblicate (v0.1, commit b914ce8), senza eseguire il codice. good=Tendenzialmente favorevole, warn=Da contestualizzare, unknown=Dati insufficienti. 'noto': difetto osservato e documentato, non corretto (richiede uno SPEC dedicato). C20-C26: attesi ricavati a mano da SPEC-soglie.md.",
   "casi": [
     {"id": "C01", "descrizione": "Barretta tipo esempio Enervit (valori per porzione), tutti i profili",
      "base": "portion", "porzione": 40, "valori": {"kcal": 147, "carb": 17, "sugar": 0.1, "poly": 15, "fiber": 2, "protein": 10},
@@ -60,9 +60,29 @@
     {"id": "C19", "descrizione": "Storico: salvataggio, persistenza dopo ricarica, cancellazione",
      "base": "portion", "valori": {"kcal": 147, "carb": 17, "poly": 15}, "nome": "Barretta <di> prova", "profili": ["gly"], "storico": true,
      "atteso": {"classi": {"gly": "warn"}, "storico": {"salvati": 1, "nome": "Barretta <di> prova", "sintesi": "Controllo glicemico: Da contestualizzare", "dopo_ricarica": true, "dopo_cancella": "Nessun alimento salvato."}}},
-    {"id": "C20", "descrizione": "Soglia sale esatta dopo la scala: 0,75 g/100 g x 40 g = 0,3 g, atteso 'good'",
-     "noto": "Virgola mobile: 0.75*0.4 = 0.30000000000000004 > 0.3, quindi 'warn'. Riguarda una soglia clinica: non corretto, va deciso con uno SPEC.",
+    {"id": "C20", "descrizione": "SPEC-soglie: sale esatto alla soglia dopo la scala, 0,75 g/100 g x 40 g = 0,3 g",
      "base": "100", "porzione": 40, "valori": {"salt": 0.75}, "profili": ["bp"],
-     "atteso": {"classi": {"bp": "good"}}}
+     "atteso": {"classi": {"bp": "good"}}},
+    {"id": "C21", "descrizione": "SPEC-soglie: sale appena sopra dopo la scala, 0,78 g/100 g x 40 g = 0,312 g",
+     "base": "100", "porzione": 40, "valori": {"salt": 0.78}, "profili": ["bp"],
+     "atteso": {"classi": {"bp": "warn"}}},
+    {"id": "C22", "descrizione": "SPEC-soglie: sale esatto alla soglia, 6 g/100 g x 5 g = 0,3 g",
+     "base": "100", "porzione": 5, "valori": {"salt": 6}, "profili": ["bp"],
+     "atteso": {"classi": {"bp": "good"}}},
+    {"id": "C23", "descrizione": "SPEC-soglie: netti esatti a 5 g per porzione, 8,3 - 3,3, solo eritritolo",
+     "base": "portion", "valori": {"carb": 8.3, "poly": 3.3}, "ingredienti": "eritritolo", "profili": ["gly"],
+     "atteso": {"classi": {"gly": "good"}}},
+    {"id": "C24", "descrizione": "SPEC-soglie: netti appena sopra, 8,31 - 3,3 = 5,01 g, solo eritritolo",
+     "base": "portion", "valori": {"carb": 8.31, "poly": 3.3}, "ingredienti": "eritritolo", "profili": ["gly"],
+     "atteso": {"classi": {"gly": "warn"}}},
+    {"id": "C25", "descrizione": "SPEC-soglie: netti esatti a 5 g dopo la scala, (32,02 - 12,02) x 25 g / 100, solo eritritolo",
+     "base": "100", "porzione": 25, "valori": {"carb": 32.02, "poly": 12.02}, "ingredienti": "eritritolo", "profili": ["gly"],
+     "atteso": {"classi": {"gly": "good"}}},
+    {"id": "C26", "descrizione": "SPEC-soglie: potassio e fosforo scalati mostrati senza residui di virgola mobile",
+     "base": "100", "porzione": 40, "valori": {"pot": 333, "phos": 50}, "profili": ["renal"],
+     "atteso": {"classi": {"renal": "unknown"}, "testo_contiene": {"renal": "Potassio: 133.2; fosforo: 20 mg"}}},
+    {"id": "C27", "descrizione": "SPEC-soglie, invariato: valori enormi ma finiti non diventano infiniti; carboidrati = polioli = 1e300, netti 0, solo eritritolo (R1-1)",
+     "base": "portion", "valori": {"carb": 1e300, "poly": 1e300}, "ingredienti": "eritritolo", "profili": ["gly"],
+     "atteso": {"classi": {"gly": "good"}, "testo_contiene": {"gly": "0 g di carboidrati al netto"}}}
   ]
 }
