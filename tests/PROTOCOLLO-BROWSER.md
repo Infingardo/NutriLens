@@ -63,3 +63,23 @@ Nota operativa: in un campo numerico con contenuto non valido, `cmd+A` non
 seleziona il testo. Per svuotarlo usa Fine + Backspace.
 
 Non coperti: Safari, Firefox, iOS/Android, PWA installata sulla schermata home.
+
+## v0.1.2 — 24 novembre 2026
+
+Stesso ambiente. Server con la v0.1.1, poi sostituita con la v0.1.2.
+
+| Passo | Esito |
+|---|---|
+| v0.1.1: sale 0,75 g/100 g, porzione 40 g → Valuta → Salva | difetto riprodotto: "0.3 g" con "Da contestualizzare"; storico 1 |
+| Copia la v0.1.2, ricarica | header ancora `v0.1.1`, SW nuovo `installed` in attesa, cache `[v011, v012]` |
+| Chiudi tutte le schede, riapri | header `v0.1.2`, cache solo `[nutrilens-v012]`, storico 1 conservato |
+| C20: sale 0,75 g/100 g × 40 g | "Tendenzialmente favorevole" |
+| C21: sale 0,78 g/100 g × 40 g | "Da contestualizzare" |
+| C23: netti 8,3 − 3,3, eritritolo | "Tendenzialmente favorevole", "5 g di carboidrati al netto" |
+| C26: potassio 333, fosforo 50 mg/100 g × 40 g | "Potassio: 133.2; fosforo: 20 mg" |
+
+Osservazioni, non corrette:
+- le voci gia' salvate nello storico non vengono ricalcolate: quella salvata
+  con la v0.1.1 resta "Da contestualizzare";
+- C21 mostra "0.3 g" accanto a "Da contestualizzare": il testo arrotonda a
+  0,1 g (0,312 → 0,3) mentre la classe usa il valore esatto.
